@@ -9,7 +9,7 @@
 // --- 方法1 同源問題 ---
 $json = file_get_contents('https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-0387CE9B-6B9C-43AB-A6F7-E03CC452690C');
 $obj = json_decode($json);
-//print_r($obj) ;
+// print_r($obj) ;
 // --- END ---
 
 // --- 方法2 ---
@@ -19,7 +19,7 @@ $obj = json_decode($json);
 // $text = file_get_contents('https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-0387CE9B-6B9C-43AB-A6F7-E03CC452690C');
 // $tt = mb_convert_encoding($text, 'UTF-8',
 //           mb_detect_encoding($text, 'UTF-8, big5', true));
-//echo $tt;
+// echo $tt;
 // --- END ---
 
 
@@ -28,14 +28,14 @@ $obj = json_decode($json);
 // echo $e->locationName. " | ";
 // }
 
-$userInput = "臺北市" ;
+$userInput = "臺中市" ;
 
 foreach ($obj->records->location as $loc ) {
     if ($loc->locationName == $userInput){
         echo $loc->locationName . "<hr>" ;
         // $element = $loc->locationName
         $element = $loc->weatherElement ; // weatherElement is an array
-        break ;
+        
     }
 }
 
@@ -48,11 +48,18 @@ foreach ($element as $e) {
     foreach ($e->time as $t) {
         echo "startTime : ".$t->startTime ."<br>";
         echo "endTime : ".$t->endTime ."<br>";
+
+        foreach ($t->parameter as $p) {
+            echo $p. "<br>";
+        }
         // echo "<br>parameterName : ".$t->parameter->parameterName ;
         // echo "<br>parameterValue : ".$t->parameter->parameterValue ; 
     }
+    echo "<hr>" ;
 }
 
-
+function getchild($parent){
+//     foreach($parent as $)
+}
 
 ?>
