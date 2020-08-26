@@ -1,4 +1,5 @@
 <?php
+   
     function setupDb() {
         // 新增資料庫連線協議
         $db = new PDO("mysql:host=localhost;dbname=weather", "root", "root");

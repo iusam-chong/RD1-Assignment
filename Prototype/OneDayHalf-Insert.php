@@ -63,5 +63,5 @@ foreach ($obj->records->location as $l ) {
     }
     
 }
-
+$db = NULL ;
 ?>

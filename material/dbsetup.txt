@@ -24,6 +24,33 @@ CREATE INDEX idx_OneDayHalf_parameterValue ON OneDayHalf(parameterValue);
 CREATE INDEX idx_OneDayHalf_startTime ON OneDayHalf(startTime);
 CREATE INDEX idx_OneDayHalf_EndTime ON OneDayHalf(EndTime);
 
+### 1WEEK TABLE ###
+
+CREATE TABLE Week (
+	`id` int NOT NULL auto_increment,
+    `locationName` varchar(20) collate utf8_unicode_ci NOT NULL,
+    `elementName` varchar(20) collate utf8_unicode_ci NOT NULL,
+    `startTime` varchar(20) collate utf8_unicode_ci,
+    `endTime` varchar(20) collate utf8_unicode_ci,
+    `dataTime` varchar(20) collate utf8_unicode_ci,
+    `value` varchar(20) collate utf8_unicode_ci NOT NULL,
+    `measures` varchar(20) collate utf8_unicode_ci NOT NULL,
+    PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT= 0 ;
+
+### TWODAY TABLE ###
+
+CREATE TABLE TWODAY (
+	`id` int NOT NULL auto_increment,
+    `locationName` varchar(20) collate utf8_unicode_ci NOT NULL,
+    `elementName` varchar(20) collate utf8_unicode_ci NOT NULL,
+    `startTime` varchar(20) collate utf8_unicode_ci,
+    `endTime` varchar(20) collate utf8_unicode_ci,
+    `dataTime` varchar(20) collate utf8_unicode_ci,
+    `value` varchar(20) collate utf8_unicode_ci NOT NULL,
+    `measures` varchar(20) collate utf8_unicode_ci NOT NULL,
+    PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT= 0 ;
 
 
 
