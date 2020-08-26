@@ -1,37 +1,31 @@
 
-### FULL FORM ###
+### 36H TABLE ###
 
-CREATE TABLE formV2 (
-	`id` int unsigned zerofill NOT NULL auto_increment,
-    `location` varchar(16) collate utf8_unicode_ci NOT NULL,
-    `elementName` varchar(16) collate utf8_unicode_ci NOT NULL,
-    `parameterName` varchar(16) collate utf8_unicode_ci,
-    `parameterUnit` varchar(16) collate utf8_unicode_ci,
-    `parameterValue` varchar(16) collate utf8_unicode_ci,
-    `startTime` varchar(16) collate utf8_unicode_ci NOT NULL,
-    `endTime` varchar(16) collate utf8_unicode_ci NOT NULL,
+CREATE TABLE OneDayHalf (
+	`id` int NOT NULL auto_increment,
+    `location` varchar(20) collate utf8_unicode_ci NOT NULL,
+    `elementName` varchar(20) collate utf8_unicode_ci NOT NULL,
+    `parameterName` varchar(20) collate utf8_unicode_ci,
+    `parameterUnit` varchar(20) collate utf8_unicode_ci,
+    `parameterValue` varchar(20) collate utf8_unicode_ci,
+    `startTime` varchar(20) collate utf8_unicode_ci NOT NULL,
+    `endTime` varchar(20) collate utf8_unicode_ci NOT NULL,
     PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8   COLLATE=utf8_unicode_ci AUTO_INCREMENT= 0 ;
 
+### 36H TABLE INDEX ###
 
-### ELEMENT FORM ####
+CREATE INDEX idx_OneDayHalf_id ON OneDayHalf(id);
+CREATE INDEX idx_OneDayHalf_location ON OneDayHalf(location);
+CREATE INDEX idx_OneDayHalf_elementName ON OneDayHalf(elementName);
+CREATE INDEX idx_OneDayHalf_parameterName ON OneDayHalf(parameterName);
+CREATE INDEX idx_OneDayHalf_parameterUnit ON OneDayHalf(parameterUnit);
+CREATE INDEX idx_OneDayHalf_parameterValue ON OneDayHalf(parameterValue);
+CREATE INDEX idx_OneDayHalf_startTime ON OneDayHalf(startTime);
+CREATE INDEX idx_OneDayHalf_EndTime ON OneDayHalf(EndTime);
 
-CREATE TABLE IF NOT EXISTS `location` (
-	`locationId` tinyint(2) unsigned zerofill NOT NULL auto_increment,
-    `locationName` varchar(16) collate utf8_unicode_ci NOT NULL,
-    PRIMARY KEY  (`locationId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8   COLLATE=utf8_unicode_ci AUTO_INCREMENT= 0 ;
 
 
-CREATE TABLE IF NOT EXISTS `Wx` (
-	`Id` int unsigned zerofill NOT NULL auto_increment,
-    `locationId` tinyint(2) collate utf8_unicode_ci NOT NULL,
-    `parameterName` varchar(16) collate utf8_unicode_ci NOT NULL,
-    `parameterValue` varchar(16) collate utf8_unicode_ci NOT NULL,
-    `startTime` varchar(16) collate utf8_unicode_ci NOT NULL,
-    `endTime` varchar(16) collate utf8_unicode_ci NOT NULL,
-    PRIMARY KEY  (`Id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8   COLLATE=utf8_unicode_ci AUTO_INCREMENT= 0 ;
 
 ⠄⠄⠄⠄⠄⠄⠄⠄⢀⣀⣤⣤⣤⣤⣤⣤⣤⣀⣀⠄⠄⠄⠄⠄⠄⠄⠄ 
 ⠄⠄⠄⠄⠄⠄⢠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⡀⠄⠄⠄⠄ 

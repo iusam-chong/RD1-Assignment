@@ -2,25 +2,7 @@
 
 require_once('configdb.php') ;
 
-// function getChildElement($child) {
-//     foreach ($child as $array){
-
-//     }
-// }
-
-// CREATE TABLE `form` (
-//     location varchar(20),     
-//    elementName	varchar(10),     
-//    startTime varchar(30),
-//    endTime	varchar(30),
-//    parameterName varchar(20),
-//    parameterUnit varchar(20),
-//    parameterValue varchar(20)
-// ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
 # 抓氣象局API 各式為JSON
-# 要更新時再開 不然連結太多次會被鎖
 $json = file_get_contents('https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-0387CE9B-6B9C-43AB-A6F7-E03CC452690C');
 $obj = json_decode($json) ;
 
@@ -35,14 +17,11 @@ $obj = json_decode($json) ;
 
 $db = setupDb() ;
 
-//$cmd = $db->prepare("INSERT INTO `form` (location,elementName,startTime,endTime,parameterName,parameterUnit,parameterValue) VALUES (:locationName,:elementName,:startTime,:endTime,:parameterName,:parameterUnit,:parameterValue)");
-$cmd = $db->prepare("INSERT INTO `formV2` (`location`,`elementName`,`startTime`,`endTime`,`parameterName`,`parameterUnit`,`parameterValue`) VALUES (:locationName,:elementName,:startTime,:endTime,:parameterName,:parameterUnit,:parameterValue)");
-// $cmd = $db->prepare("UPDATE `form` SET(location) VALUES (:locationName)") ;
+$cmd = $db->prepare("INSERT INTO `OneDayHalf` (`location`,`elementName`,`startTime`,`endTime`,`parameterName`,`parameterUnit`,`parameterValue`) VALUES (:locationName,:elementName,:startTime,:endTime,:parameterName,:parameterUnit,:parameterValue)");
 
 foreach ($obj->records->location as $l ) {
     echo $l->locationName."<br>" ;
     $cmd->bindValue(":locationName", $l->locationName);
-    // $cmd->execute();
     
     foreach ($l->weatherElement as $e ) {
         echo $e->elementName."<br>" ;
@@ -61,7 +40,6 @@ foreach ($obj->records->location as $l ) {
             $cmd->bindValue(":parameterValue", "");
 
             foreach ($t->parameter as $key => $item) {
-                //echo $key . ":" . $item . "<br>" ;
                 
                 if($key == "parameterName"){
                     echo $key ." : " ;
@@ -78,10 +56,6 @@ foreach ($obj->records->location as $l ) {
                     echo $item . "<br>";
                     $cmd->bindValue(":parameterValue", $item);
                 } 
-
-                // get array last key in foreach 
-                // https://stackoverflow.com/questions/1070244/how-to-determine-the-first-and-last-iteration-in-a-foreach-loop
-                
             }
             $cmd->execute();
             echo "<hr>" ;
@@ -90,7 +64,4 @@ foreach ($obj->records->location as $l ) {
     
 }
 
-
-
-// INSERT locationName , elementName
 ?>
