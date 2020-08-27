@@ -5,7 +5,10 @@
 第一行指令是指定檔案
 第二行是覆蓋執行
 
-輸入 
+輸入
+
+*/1 * * * * lynx -dump http://localhost:8888/RD1-Assignment/Week-Update.php
+
 crontab mycron.txt
 crontab -l
 

@@ -18,8 +18,14 @@
             case "MaxT":
                 $elementName ="最高溫度";
                 break;
+            case "PoP":
+                $elementName ="降雨機率";
+                break;
             case "T":
                 $elementName ="溫度";
+                break;
+            case "CI":
+                $elementName ="情況";
                 break;
         }
         return $elementName ;
@@ -44,6 +50,8 @@
                 $chkValue .= "°C";
                 break;
             case "天氣現象":
+                break;
+            case "情況":
                 break;
         }
         return $chkValue ;
@@ -144,17 +152,66 @@
                     <h3>$m->locationName</h3></div>
                 locationBody ;
             }
+            #####################################################################################
+           
+            foreach ($modelToday as $m){
+                #div tab pane location
+                echo $HtmlText = <<< locationBody
+                    <div id="$m->locationName" class="tab-pane fade">
+                    
+                locationBody ;
 
+                #table twoday upper row
+                echo $HtmlText = <<< tableContainer
+                    <div class="row"><div class="col-md-6">
+                    <h4>今日天氣</h4>
+                    <table class="table table-borderless"><thead class="th-Color"> <tr> <th scope="col"></th>
+                tableContainer ;
+
+                # table twoday th 
+                foreach ($m->element as $e) {
+                    $count = 0 ;
+                    foreach ($e->time as $t) {
+                        // 資料庫的日期格式是統一的
+                        $timeTh = substr($t["startTime"],6) ;
+                        
+                        echo $HtmlText = <<< tableTh
+                        <th scope="col">$timeTh</th>
+                        tableTh ;
+                    }
+                    break ;
+                }
+                echo "</tr></thead> " ; 
+                echo "<tbody>" ;
+
+                foreach ($m->element as $e){
+                    $elementName = setName($e->elementName) ; 
+                    echo "<tr><th scope='row' class='td-Color'>$elementName</th>" ;
+                    
+                    foreach ($e->time as $t) {
+                        
+                        $value = $t["value"] ;
+                        $value = valueChk($t["value"],$elementName) ;
+                        echo "<td>$value</td>" ;
+                    }
+                    echo "</tr>" ;
+                }
+
+                # table tbody, table week end , col, row, tab-pane end
+                echo "</tbody></table></div></div></div>" ;
+            }
+
+            #####################################################################################
             foreach ($modelTwoDay as $m){
                 #div tab pane location
                 echo $HtmlText = <<< locationBody
                     <div id="$m->locationName" class="tab-pane fade">
-                    <h4>未來兩日預報</h4>
                 locationBody ;
 
                 #table twoday upper row
                 echo $HtmlText = <<< tableContainer
                     <div class="row"><div class="col">
+                    <h4>未來兩日預報</h4>
                     <table class="table table-borderless"><thead class="th-Color"> <tr> <th scope="col"></th>
                 tableContainer ;
 
@@ -170,10 +227,10 @@
                         echo $HtmlText = <<< tableTh
                         <th scope="col">$date $time</th>
                         tableTh ;
+
+                        
                         // 一個欄位3小時，8個為一天，程式只要2天=16
-                        if ($count > 16) {
-                            break ; 
-                        }$count++ ;
+                        
                     }
                     break ;
                 }
@@ -185,12 +242,14 @@
                     echo "<tr><th scope='row' class='td-Color'>$elementName</th>" ;
                     $count = 0 ;
                     foreach ($e->time as $t) {
+                        if ($count > 16) {
+                            break ; 
+                        }
+                        $count++ ;
                         $value = valueChk($t["value"],$elementName) ;
                         echo "<td>$value</td>" ;
 
-                        if ($count > 16) {
-                            break ; 
-                        }$count++ ;
+                        
                     }
                     echo "</tr>" ;
                 }
@@ -199,16 +258,17 @@
                 echo "</tbody></table></div></div></div>" ;
             }
 
+            #####################################################################################
             foreach ($modelWeek as $m){
                 #div tab pane location
                 echo $HtmlText = <<< locationBody
                     <div id="$m->locationName" class="tab-pane fade">
-                    <h4>一週預報</h4>
                 locationBody ;
                 
                 # table week row
                 echo $HtmlText = <<< tableContainer
                     <div class="row"><div class="col">
+                    <h4>一週預報</h4>
                     <table class="table table-borderless"><thead class="th-Color"> <tr><th scope="col"></th>
                 tableContainer ;
 

@@ -1,3 +1,5 @@
+### 氣象局授權碼 ###
+CWB-0387CE9B-6B9C-43AB-A6F7-E03CC452690C
 
 ### 36H TABLE ###
 
@@ -38,6 +40,15 @@ CREATE TABLE Week (
     PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT= 0 ;
 
+CREATE INDEX idx_week_id ON week(id);
+CREATE INDEX idx_week_locationName ON week(locationName);
+CREATE INDEX idx_week_elementName ON week(elementName);
+CREATE INDEX idx_week_measures ON week(measures);
+CREATE INDEX idx_week_value ON week(value);
+CREATE INDEX idx_week_startTime ON week(startTime);
+CREATE INDEX idx_week_endTime ON week(endTime);
+CREATE INDEX idx_week_dataTime ON week(dataTime);
+
 ### TWODAY TABLE ###
 
 CREATE TABLE TWODAY (
@@ -52,6 +63,13 @@ CREATE TABLE TWODAY (
     PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT= 0 ;
 
+CREATE INDEX idx_twoday_id ON twoday(id);
+CREATE INDEX idx_twoday_locationName ON twoday(locationName);
+CREATE INDEX idx_twoday_elementName ON twoday(elementName);
+CREATE INDEX idx_twoday_measures ON twoday(measures);
+CREATE INDEX idx_twoday_value ON twoday(value);
+CREATE INDEX idx_twoday_startTime ON twoday(startTime);
+CREATE INDEX idx_twoday_endTime ON twoday(endTime);
 
 
 ⠄⠄⠄⠄⠄⠄⠄⠄⢀⣀⣤⣤⣤⣤⣤⣤⣤⣀⣀⠄⠄⠄⠄⠄⠄⠄⠄ 

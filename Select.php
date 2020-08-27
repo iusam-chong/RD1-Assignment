@@ -139,4 +139,69 @@ foreach($modelTwoDay as $m) {
     }
  }
  
+########################### OneDayHalf ################################
+$modelToday = array() ;
+
+# IMPORTANT! Onedayhalf table should change the col name consistent with other table
+function getValueAndTimeToday($locationName, $elementName, $table, $Time, $value){
+    
+    @$db = setupDb() ;
+    
+    $command = <<< sqlDoc
+        SELECT $Time, $value FROM $table
+        WHERE location = :locationName AND elementName = :elementName
+    sqlDoc ;
+    $cmd = $db->prepare($command) ;
+    $cmd->bindValue(":locationName",$locationName) ;
+    $cmd->bindValue(":elementName",$elementName) ;
+    $cmd->execute();
+
+    $row = $cmd->fetchAll();
+    return $row ;
+}
+
+# Catch no-repeat location name from table and save to array
+$command = sqlCommand("location", "onedayhalf") ;
+$locationList = GetTableElement($command) ;
+
+# Like above but is element
+$command = sqlCommand("elementName", "onedayhalf") ;
+$elementList = GetTableElement($command) ;
+
+# Pass elementList to locationList save in modelToday array 
+$modelToday = array() ;
+foreach ($locationList as $lKey => $lValue) {
+    $obj = (object) ["locationName" => $lValue] ;
+    $arr = [] ;
+    foreach ($elementList as $eKey => $eValue) {
+        if($eValue == "parameterUnit" || $eValue == "endTime")
+            continue ;
+        $arr[] = (object) ["elementName" => $eValue] ;
+        $obj->element = $arr ;
+    }
+    $modelToday[] = $obj  ;
+}
+
+# Using mode array to add element time and value 
+foreach($modelToday as $m) {
+    foreach($m->element as $e) {
+        
+        $arrTime = array() ;
+
+        # Db have two time col but different name and one of them must me NULL
+        //$thisTime = ($e->elementName == "T") ? "dataTime" : "startTime" ;
+
+        $getValue = getValueAndTimeToday($m->locationName, $e->elementName, "onedayhalf", "startTime", "parameterName") ;
+        
+        foreach ($getValue as $gv) {
+            
+            $row = array("startTime" => $gv["startTime"], "value" => $gv["parameterName"]) ;
+
+            array_push($arrTime,$row) ;
+            break ;
+        }
+        $e->time = $arrTime ;
+    }
+}
+//print_r($modelToday) ;
 ?>
