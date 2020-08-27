@@ -22,71 +22,13 @@ function GetTableElement($command){
     return $arr ;
 }
 
-# Catch no-repeat location name from table and save to array
-$command = <<< sqlDoc
-    SELECT DISTINCT locationName FROM week
-sqlDoc ;
-$locationList = GetTableElement($command) ;
-
-# Like above but is element
-$command = <<< sqlDoc
-    SELECT DISTINCT ElementName FROM week
-sqlDoc ;
-$elementList = GetTableElement($command) ;
-
-# (prototype) Pass elementList to locationList save in model array 
-// $model = array() ;
-// foreach ($locationList as $lKey => $lValue) {
-//     $obj = (object) ["locationName" => $lValue] ;
-//     $arr = [] ;
-//     foreach ($elementList as $eKey => $eValue) {
-//         $arr[] = (object) ["elementName" => $eValue] ;
-//         $obj->element = $arr ;
-//     }
-//     $model[] = $obj  ;
-// }
-
-# (prototype) These code will help to see $model structure
-// foreach($model as $v){
-//     echo $v->locationName . "<br>" ;
-//     foreach($v->element as $e){
-//         echo $e->elementName . " | ";
-//     } 
-//     echo "<hr>";
-// }
-
-$model = array() ;
-foreach ($locationList as $lKey => $lValue) {
-    $obj = (object) ["locationName" => $lValue] ;
-    $arr = [] ;
-    foreach ($elementList as $eKey => $eValue) {
-        $arr[] = (object) ["elementName" => $eValue] ;
-        $obj->element = $arr ;
-    }
-    $model[] = $obj  ;
-}
-//print_r($model) ;
-
-//$cmd = $db->prepare($command) ;
-
-// $command = <<< sqlDoc
-// SELECT COUNT('value') FROM `week` WHERE locationName = '雲林縣' AND elementName = 'Wx'
-// sqlDoc ;
-// @$db = setupDb() ;
-// $cmd = $db->prepare($command) ;
-// $cmd->execute();
-// $row = $cmd->fetch();
-// print_r($row) ;
-
-$row = countValueRow("雲林縣", "Wx") ;
-echo $row ;
-
-function countValueRow($locationName, $elementName){
+# Return startTime and value by rows 
+function getValueAndTime($locationName, $elementName, $table, $Time, $value){
     
     @$db = setupDb() ;
     
     $command = <<< sqlDoc
-        SELECT COUNT('value') FROM `week` 
+        SELECT $Time, $value FROM $table
         WHERE locationName = :locationName AND elementName = :elementName
     sqlDoc ;
     $cmd = $db->prepare($command) ;
@@ -94,17 +36,107 @@ function countValueRow($locationName, $elementName){
     $cmd->bindValue(":elementName",$elementName) ;
     $cmd->execute();
 
-    $row = $cmd->fetch();
-    return $row["COUNT('value')"] ;
+    $row = $cmd->fetchAll();
+    return $row ;
 }
 
-// $command = <<< sqlDoc
-// SELECT `startTime`, `value`
-//     FROM `Week` 
-//     WHERE  `locationName` = "" AND `elementName` = "PoP12h"
-// sqlDoc ;
+# Write sql command without repeat code
+function sqlCommand($colName, $tableName ){
+    $command = <<< sqlDoc
+        SELECT DISTINCT $colName FROM $tableName
+    sqlDoc ;
+    return $command ;
+}
 
-// @$db = setupDb() ;
-// $cmd = $db->prepare($command) ;
+########################### ModelWeek ################################
 
+# Catch no-repeat location name from table and save to array
+$command = sqlCommand("locationName", "Week") ;
+$locationList = GetTableElement($command) ;
+
+# Like above but is element
+$command = sqlCommand("elementName", "Week") ;
+$elementList = GetTableElement($command) ;
+
+# (prototype) Pass elementList to locationList save in modelWeek array 
+$modelWeek = array() ;
+foreach ($locationList as $lKey => $lValue) {
+    $obj = (object) ["locationName" => $lValue] ;
+    $arr = [] ;
+    foreach ($elementList as $eKey => $eValue) {
+        $arr[] = (object) ["elementName" => $eValue] ;
+        $obj->element = $arr ;
+    }
+    $modelWeek[] = $obj  ;
+}
+
+# (showcase) These code will help to see $modelWeek structure
+// foreach($modelWeek as $v){
+//     echo $v->locationName . "<br>" ;
+//     foreach($v->element as $e){
+//         echo $e->elementName . " | ";
+//     } 
+//     echo "<hr>";
+// }
+
+# Using mode array to add element time and value 
+foreach($modelWeek as $m) {
+   foreach($m->element as $e){
+       
+        $arrTime = array() ; 
+        $getValue = getValueAndTime($m->locationName, $e->elementName, "Week", "startTime", "value") ;
+
+        foreach ($getValue as $gv) {
+            $row = array("startTime" => $gv['startTime'], "value" => $gv['value']) ;
+            array_push($arrTime,$row) ;
+        }
+        $e->time = $arrTime ;
+    }
+}
+
+########################### ModelTwoDay ################################
+
+# Catch no-repeat location name from table and save to array
+$command = sqlCommand("locationName", "twoDay") ;
+$locationList = GetTableElement($command) ;
+
+# Like above but is element
+$command = sqlCommand("elementName", "twoDay") ;
+$elementList = GetTableElement($command) ;
+
+# Pass elementList to locationList save in modelTwoDay array 
+$modelTwoDay = array() ;
+foreach ($locationList as $lKey => $lValue) {
+    $obj = (object) ["locationName" => $lValue] ;
+    $arr = [] ;
+    foreach ($elementList as $eKey => $eValue) {
+        if($eValue == "MinT" || $eValue == "MaxT" || $eValue == "PoP12h")
+            continue ;
+        $arr[] = (object) ["elementName" => $eValue] ;
+        $obj->element = $arr ;
+    }
+    $modelTwoDay[] = $obj  ;
+}
+
+# Using mode array to add element time and value 
+foreach($modelTwoDay as $m) {
+    foreach($m->element as $e) {
+        
+        $arrTime = array() ;
+
+        # Db have two time col but different name and one of them must me NULL
+        $thisTime = ($e->elementName == "T") ? "dataTime" : "startTime" ;
+
+        $getValue = getValueAndTime($m->locationName, $e->elementName, "TwoDay", $thisTime, "value") ;
+        
+        foreach ($getValue as $gv) {
+            
+            $row = array("startTime" => $gv[$thisTime], "value" => $gv['value']) ;
+
+            array_push($arrTime,$row) ;
+        }
+        $e->time = $arrTime ;
+    }
+ }
+ 
 ?>
