@@ -72,6 +72,21 @@ CREATE INDEX idx_twoday_startTime ON twoday(startTime);
 CREATE INDEX idx_twoday_endTime ON twoday(endTime);
 
 
+### RainFall TABLE ###
+CREATE TABLE RainFall ( 
+    `id` int NOT NULL auto_increment, 
+    `stationName` varchar(20) collate utf8_unicode_ci NOT NULL, 
+    `dataDate` varchar(20) collate utf8_unicode_ci, 
+    `precipitation` varchar(20) collate utf8_unicode_ci NOT NULL, 
+    PRIMARY KEY (`id`) 
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT= 0
+
+CREATE INDEX idx_rainfall_id ON RainFall(id);
+CREATE INDEX idx_rainfall_locationName ON RainFall(stationName);
+CREATE INDEX idx_rainfall_elementName ON RainFall(dataDate);
+CREATE INDEX idx_rainfall_measures ON RainFall(precipitation);
+
+
 ⠄⠄⠄⠄⠄⠄⠄⠄⢀⣀⣤⣤⣤⣤⣤⣤⣤⣀⣀⠄⠄⠄⠄⠄⠄⠄⠄ 
 ⠄⠄⠄⠄⠄⠄⢠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⡀⠄⠄⠄⠄ 
 ⠄⠄⠄⠄⠄⣰⣿⣿⡟⠻⣿⠟⠻⣿⣿⠛⢻⣿⡿⠻⣿⣿⣿⣦⡀⠄⠄ 

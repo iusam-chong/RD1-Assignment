@@ -1,5 +1,5 @@
 <?php
-    require_once('Select.php') ;
+    require_once('SelectWeather.php') ;
     
     function setName($elementName) {
         switch ($elementName) {
@@ -170,8 +170,9 @@
 
                 # table twoday th 
                 foreach ($m->element as $e) {
-                    $count = 0 ;
+                    
                     foreach ($e->time as $t) {
+                        
                         // 資料庫的日期格式是統一的
                         $timeTh = substr($t["startTime"],6) ;
                         
@@ -242,7 +243,7 @@
                     echo "<tr><th scope='row' class='td-Color'>$elementName</th>" ;
                     $count = 0 ;
                     foreach ($e->time as $t) {
-                        if ($count > 16) {
+                        if ($count > 11) {
                             break ; 
                         }
                         $count++ ;

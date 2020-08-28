@@ -1,6 +1,6 @@
 <?php
 
-    require_once('ConfigDb.php') ;
+    require_once('configdb.php') ;
 
     require_once('UpdateAction.php') ;
 
