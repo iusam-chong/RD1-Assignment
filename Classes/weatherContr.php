@@ -7,16 +7,37 @@ public function updateWeather() {
     $time_start = microtime(true);
 
     $data = $this->constructOneDay();
-    $this->runUpdate('oneday', $data);
+    $this->runUpdateOne('oneday', $data);
 
-    $data = $this->constructTwoDay();
-    $this->runUpdate('twoday', $data);
+    // $data = $this->constructTwoDay();
+    // $this->runUpdate('twoday', $data);
 
-    $data = $this->constructWeek();
-    $this->runUpdate('week', $data);
+    // $data = $this->constructWeek();
+    // $this->runUpdate('week', $data);
+
+    // $data = $this->constructAccumRain();
+    // $this->updateAccumRain('accumlaterain', $data);
 
     $time_end = microtime(true);
     echo $time_end - $time_start;
+}
+
+public function constructAccumRain() {
+    $api = $this->accumRainApi();
+    $data = [];
+
+    foreach ($api as $loc) {
+        
+        $hour = ($loc->weatherElement[0]->elementValue <= 0) ? '-' : $loc->weatherElement[0]->elementValue;
+        $day = ($loc->weatherElement[1]->elementValue <= 0) ? '-' : $loc->weatherElement[1]->elementValue;
+
+        $row = (object)["city"     => $loc->parameter[0]->parameterValue,
+                        "location" => $loc->locationName,
+                        "hour"     => $hour,
+                        "day"      => $day ];
+        $data[] = $row;
+    } 
+    return($data);
 }
 
 public function constructOneDay() {
@@ -24,7 +45,11 @@ public function constructOneDay() {
     $data = [] ;
 
     foreach ($api as $l){
+
+        $row = (object)["location" => $l->locationName];
+
         foreach ($l->weatherElement as $e) {
+            
             foreach ($e->time as $t) {
                 #data filter will do here below
 
@@ -37,24 +62,32 @@ public function constructOneDay() {
                     continue;
                 }
                 
+                
+                $row->day  = $getDay;
+                $row->hour = $getHour;          
+
                 # if code above can run until here ,do next step
                 foreach ($t->parameter as $key => $item) {
 
                     if (!is_numeric($item))
                         continue ;
                     
-                    $row = (object) ["location" => $l->locationName,
-                                     "element"  => $e->elementName,
-                                     "day"      => $getDay,
-                                     "hour"     => $getHour,
-                                     "value"    => $item];
-                    $data[] = $row;
+                    if ($e->elementName == "Wx")
+                        $row->wx = $item;
+                    else if ($e->elementName == "PoP")
+                        $row->pop = $item;
+                    else if ($e->elementName == "MinT")
+                        $row->mint = $item;
+                    else if ($e->elementName == "MaxT")
+                        $row->maxt = $item;
                 }
+                
                 # we just want 1 city 1 row data of today
                 # if want more row erase 'break'
                 break;
             }
         }
+        $data[] = $row;
     }
     # end of foreach
     return($data);

@@ -27,6 +27,13 @@ class Weather extends Dbh {
         return $obj;
     }
 
+    public function accumRainApi() {
+        $json = file_get_contents('https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0002-001?Authorization=CWB-0387CE9B-6B9C-43AB-A6F7-E03CC452690C&elementName=RAIN,HOUR_24') ;
+        $obj = json_decode($json) ;
+        $obj = $obj->records->location;
+        return $obj;
+    }
+
     public function runUpdate($tableName,$data) {
 
         $sql = "TRUNCATE TABLE $tableName";
@@ -38,6 +45,50 @@ class Weather extends Dbh {
         }
         $sql = substr_replace($sql,"",-1);
         $this->insert($sql);
+    }
+
+    public function runUpdateOne($tableName,$data) {
+
+        $sql = "TRUNCATE TABLE $tableName";
+        $this->insert($sql);
+
+        $sql = "INSERT INTO $tableName (`location`,`day`,`hour`,`wx`,`pop`,`mint`,`maxt`) VALUES";
+        foreach ($data as $d) {
+            $sql = $sql . " ('$d->location','$d->day','$d->hour','$d->wx','$d->pop','$d->mint','$d->maxt'),";
+        }
+        $sql = substr_replace($sql,"",-1);
+        $this->insert($sql);
+    }
+
+    public function updateAccumRain($tableName,$data) {
+
+        $sql = "TRUNCATE TABLE $tableName";
+        $this->insert($sql);
+        
+        $sql = "INSERT INTO $tableName (`city`,`location`,`hour`,`day`) VALUES";
+        foreach ($data as $d) {
+            $sql = $sql . " ('$d->city','$d->location','$d->hour','$d->day'),";
+        }
+        $sql = substr_replace($sql,"",-1);
+        $this->insert($sql);
+    }
+
+    public function getTodayWeather($cityName) {
+
+        $sql = "SELECT * FROM `oneday` WHERE `location` = ? ";
+        $param = array($cityName);
+        $result = $this->select($sql,$param);
+
+        return $result;
+    }
+
+    public function getTwoDayWeather($cityName,$hour) {
+       
+        $sql = "SELECT * FROM `twoday` WHERE (`location` = ?) AND (`hour` = ?)";
+        $param = array($cityName,$hour);
+        $result = $this->selectAll($sql,$param);
+
+        return $result;
     }
 
 }
