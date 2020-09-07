@@ -10,35 +10,8 @@ class WeatherView extends Weather {
 
         # hour would be 06 or 18
         $twoday = $this->getTwoDayWeather($cityName,'06');
-
-        $twoDayOne = (object) [];
-        foreach ($twoday as $t) {
-            if ($t['day'] == $twoday[0]['day']) {
-                $twoDayOne->day = substr($t['day'],5,5);
-
-                if ($t['element'] == "Wx")
-                    $twoDayOne->wx = $t['value'];
-                if ($t['element'] == "PoP6h")
-                    $twoDayOne->pop6h = $t['value'];
-                if ($t['element'] == "T")
-                    $twoDayOne->t = $t['value'];
-            }
-        }
-
-        $twoDayTwo = (object) [];
-        foreach ($twoday as $t) {
-            if ($t['day'] == $twoday[1]['day']) {
-                $twoDayTwo->day = substr($t['day'],5,5);
-
-                if ($t['element'] == "Wx")
-                    $twoDayTwo->wx = $t['value'];
-                if ($t['element'] == "PoP6h")
-                    $twoDayTwo->pop6h = $t['value'];
-                if ($t['element'] == "T")
-                    $twoDayTwo->t = $t['value'];
-            }
-        }
-
+        $week = $this->getWeekWeather($cityName,'06');
+       
         require_once('./views/weatherView.page.php');
     }
 

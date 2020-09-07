@@ -34,19 +34,6 @@ class Weather extends Dbh {
         return $obj;
     }
 
-    public function runUpdate($tableName,$data) {
-
-        $sql = "TRUNCATE TABLE $tableName";
-        $this->insert($sql);
-
-        $sql = "INSERT INTO $tableName (`location`,`element`,`day`,`hour`,`value`) VALUES";
-        foreach ($data as $d) {
-            $sql = $sql . " ('$d->location','$d->element','$d->day','$d->hour','$d->value'),";
-        }
-        $sql = substr_replace($sql,"",-1);
-        $this->insert($sql);
-    }
-
     public function runUpdateOne($tableName,$data) {
 
         $sql = "TRUNCATE TABLE $tableName";
@@ -55,6 +42,32 @@ class Weather extends Dbh {
         $sql = "INSERT INTO $tableName (`location`,`day`,`hour`,`wx`,`pop`,`mint`,`maxt`) VALUES";
         foreach ($data as $d) {
             $sql = $sql . " ('$d->location','$d->day','$d->hour','$d->wx','$d->pop','$d->mint','$d->maxt'),";
+        }
+        $sql = substr_replace($sql,"",-1);
+        $this->insert($sql);
+    }
+
+    public function runUpdateTwo($tableName,$data) {
+
+        $sql = "TRUNCATE TABLE $tableName";
+        $this->insert($sql);
+
+        $sql = "INSERT INTO $tableName (`location`,`day`,`hour`,`wx`,`t`,`pop6h`) VALUES";
+        foreach ($data as $d) {
+            $sql = $sql . " ('$d->location','$d->day','$d->hour','$d->wx','$d->t','$d->pop6h'),";
+        }
+        $sql = substr_replace($sql,"",-1);
+        $this->insert($sql);
+    }
+
+    public function runUpdateWeek($tableName,$data) {
+
+        $sql = "TRUNCATE TABLE $tableName";
+        $this->insert($sql);
+
+        $sql = "INSERT INTO $tableName (`location`,`day`,`hour`,`wx`,`mint`,`maxt`) VALUES";
+        foreach ($data as $d) {
+            $sql = $sql . " ('$d->location','$d->day','$d->hour','$d->wx','$d->mint','$d->maxt'),";
         }
         $sql = substr_replace($sql,"",-1);
         $this->insert($sql);
@@ -91,6 +104,14 @@ class Weather extends Dbh {
         return $result;
     }
 
+    public function getWeekWeather($cityName,$hour) {
+       
+        $sql = "SELECT * FROM `week` WHERE (`location` = ?) AND (`hour` = ?)";
+        $param = array($cityName,$hour);
+        $result = $this->selectAll($sql,$param);
+
+        return $result;
+    }
 }
 
 ?>

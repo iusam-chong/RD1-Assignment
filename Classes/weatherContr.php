@@ -9,11 +9,11 @@ public function updateWeather() {
     $data = $this->constructOneDay();
     $this->runUpdateOne('oneday', $data);
 
-    // $data = $this->constructTwoDay();
-    // $this->runUpdate('twoday', $data);
+    $data = $this->constructTwoDay();
+    $this->runUpdateTwo('twoday', $data);
 
-    // $data = $this->constructWeek();
-    // $this->runUpdate('week', $data);
+    $data = $this->constructWeek();
+    $this->runUpdateWeek('week', $data);
 
     // $data = $this->constructAccumRain();
     // $this->updateAccumRain('accumlaterain', $data);
@@ -61,7 +61,6 @@ public function constructOneDay() {
                 if (!($getHour == 18 || $getHour == 6)){
                     continue;
                 }
-                
                 
                 $row->day  = $getDay;
                 $row->hour = $getHour;          
@@ -129,25 +128,67 @@ public function constructTwoDay() {
                 if (!($getHour == 18 || $getHour == 6)){
                     continue;
                 }
-                
+
+                foreach ($l->weatherElement as $ee) {
+
+                }
+
                 # if code above can run until here ,do next step
                 foreach ($t->elementValue as $v) {
-                    
+                
                     if (!is_numeric($v->value))
                         continue ;
                     
                     $row = (object) ["location" => $l->locationName,
-                                     "element"  => $e->elementName,
-                                     "day"      => $getDay,
-                                     "hour"     => $getHour,
-                                     "value"    => $v->value];
+                                        "element"  => $e->elementName,
+                                        "day"      => $getDay,
+                                        "hour"     => $getHour,
+                                        "value"    => $v->value];
                     $data[] = $row;
                 }
             }
         }
     }
     # end of foreach
-    return($data);
+
+    # Sort out data format, make it clear
+    $cityFlag = NULL;
+    foreach ($data as $d) {
+
+        if($cityFlag == $d->location) 
+            if ($dayFlag >= $d->day && $hourFlag >= $d->hour){
+                continue; 
+        }
+        
+        $row = (object)["location" => $d->location];
+
+        $row->day  = $d->day;
+        $row->hour = $d->hour;  
+
+        foreach ($data as $s) {
+
+            # Set flag
+            $dayFlag = $d->day;
+            $hourFlag = $d->hour;
+            $cityFlag = $d->location;
+
+            if ($s->location != $d->location)
+                continue;
+            
+            if ($d->day != $s->day || $d->hour != $s->hour)
+                continue;
+
+            if ($s->element == "Wx")
+                $row->wx = $s->value;
+            else if ($s->element == "PoP6h")
+                $row->pop6h = $s->value;
+            else if ($s->element == "T")
+                $row->t = $s->value;
+        }
+        $result[] = $row;
+    }
+    # end of foreach
+    return($result);
 }
 # END OF FUNCTION
 
@@ -204,10 +245,47 @@ public function constructWeek() {
         }
     }
     # end of foreach
-    return($data);
+
+    # Sort out data format, make it clear
+    $cityFlag = NULL;
+    foreach ($data as $d) {
+
+        if($cityFlag == $d->location) 
+            if ($dayFlag >= $d->day && $hourFlag >= $d->hour){
+                continue; 
+        }
+        
+        $row = (object)["location" => $d->location];
+
+        $row->day  = $d->day;
+        $row->hour = $d->hour;  
+
+        foreach ($data as $s) {
+
+            # Set flag
+            $dayFlag = $d->day;
+            $hourFlag = $d->hour;
+            $cityFlag = $d->location;
+
+            if ($s->location != $d->location)
+                continue;
+            
+            if ($d->day != $s->day || $d->hour != $s->hour)
+                continue;
+
+            if ($s->element == "Wx")
+                $row->wx = $s->value;
+            else if ($s->element == "MinT")
+                $row->mint = $s->value;
+            else if ($s->element == "MaxT")
+                $row->maxt = $s->value;
+        }
+        $result[] = $row;
+    }
+    # end of foreach
+    return($result);
 }
 # END OF FUNCTION
-
 
 }
 # END OF CLASS

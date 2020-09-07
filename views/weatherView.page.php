@@ -7,12 +7,12 @@ require_once('header.page.php');
 <body>
    
 <div class="container text-center">
-<div class="row h-50">
+<div class="row h-75">
 <div class="col-sm-12 my-auto">
     <div class="row">
 
     <div class="col-3">
-        <div class="card border-primary " style="height: 18rem;">
+        <div class="card border-primary " style="height: 16rem;">
             <div class="card-body">
                 <h5 class="card-title">選擇縣市</h5>
                 <ul class="list-group list-group-flush">
@@ -38,12 +38,12 @@ require_once('header.page.php');
     </div>
 
     <div class="col-3">
-        <div class="card border-primary " style="height: 18rem;">
+        <div class="card border-primary " style="height: 16rem;">
             <div class="card-body">
                 <h5 class="card-title">今日<?= $todayDayOrNight?></h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item" style="border: none">
-                        <img src="./views/icon/<?= $this->createImg($today['wx'])?>" width=90/>
+                        <img src="./views/icon/<?= $this->createImg($today['wx'])?>" style="height:60px;width:auto;"/>
                     </li>
                     <li class="list-group-item" style="border: none">
                         <?= $today['mint']."° - ".$today['maxt']."°" ?>
@@ -64,55 +64,56 @@ require_once('header.page.php');
     </div>
 
     <div class="col-6">
-        <div class="card border-primary " style="height: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">未來2天天氣</h5>
-                <div class="row">
-                    <div class="col-6">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item" style="border: none">
-                                <?= $twoDayOne->day ?>
-                            </li>
-                            <li class="list-group-item" style="border: none">
-                                <img src="./views/icon/<?= $this->createImg($twoDayOne->wx)?>" width=90/>
-                            </li>
-                            <li class="list-group-item" style="border: none">
-                                <?= $twoDayOne->t."°"?>
-                            </li>
-                            <li class="list-group-item" style="border: none">
-                                <div class="row">
-                                    <div class="col-6 float-right" style="text-align:right">
-                                        <img src="./views/icon/icon-umberella.png" width=30/>
+        <div class="card border-primary">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card" style="height: 16rem; border: none;">
+                        <div class="card-body">
+                            <h5 class="card-title">明天天氣</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" style="border: none">
+                                    <img src="./views/icon/<?= $this->createImg($twoday[0]['wx'])?>" style="height:60px;width:auto;"/>
+                                </li>
+                                <li class="list-group-item" style="border: none">
+                                    <?= $twoday[0]['t']."°" ?>
+                                </li>
+                                <li class="list-group-item" style="border: none">
+                                    <div class="row">
+                                        <div class="col-6 float-right" style="text-align:right">
+                                            <img src="./views/icon/icon-umberella.png" width=30/>
+                                        </div>
+                                        <div class="col-6 float-left" style="text-align:left">
+                                            <?= $twoday[0]['pop6h']."%" ?>
+                                        </div>
                                     </div>
-                                    <div class="col-6 float-left" style="text-align:left">
-                                        <?= $twoDayOne->pop6h."%" ?>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item" style="border: none">
-                                <?= $twoDayTwo->day ?>
-                            </li>
-                            <li class="list-group-item" style="border: none">
-                                <img src="./views/icon/<?= $this->createImg($twoDayTwo->wx)?>" width=50/>
-                            </li>
-                            <li class="list-group-item" style="border: none">
-                                <?= $twoDayTwo->t."°"?>
-                            </li>
-                            <li class="list-group-item" style="border: none">
-                                <div class="row">
-                                    <div class="col-6 float-right" style="text-align:right">
-                                        <img src="./views/icon/icon-umberella.png" width=30/>
+                </div>
+                <div class="col-6">
+                    <div class="card" style="height: 16rem; border: none;">
+                        <div class="card-body">
+                            <h5 class="card-title">後天天氣</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" style="border: none">
+                                    <img src="./views/icon/<?= $this->createImg($twoday[1]['wx'])?>" style="height:60px;width:auto;"/>
+                                </li>
+                                <li class="list-group-item" style="border: none">
+                                    <?= $twoday[1]['t']."°" ?>
+                                </li>
+                                <li class="list-group-item" style="border: none">
+                                    <div class="row">
+                                        <div class="col-6 float-right" style="text-align:right">
+                                            <img src="./views/icon/icon-umberella.png" width=30/>
+                                        </div>
+                                        <div class="col-6 float-left" style="text-align:left">
+                                            <?= $twoday[1]['pop6h']."%" ?>
+                                        </div>
                                     </div>
-                                    <div class="col-6 float-left" style="text-align:left">
-                                        <?= $twoDayTwo->pop6h."%" ?>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -124,16 +125,34 @@ require_once('header.page.php');
 
     <div class="row" style="padding-top:25px;">
         <div class="col-12">
-            
-        <div class="card border-info " style="height: 18rem;">
+        
+        <div class="card border-info " style="height: 20rem;">
             <div class="card-body">
-                <h5 class="card-title">未來1週天氣</h5>
-                    <div class="row">
-                        <div class="col">
+                <h5 class="card-title">未來一週天氣</h5>
+                <div class="row seven-cols">
+                    <?php foreach ($week as $w) {
+                        $day = substr($w['day'],5,5);
+                        $wx = $this->createImg($w['wx']);
+                        $mint = $w['mint'];
+                        $maxt = $w['maxt'];
+                        echo '<div class="col-md-1">
+                                <div class="card" style="border: none;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">'.$day.'</h5>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item" style="border: none">
+                                                <img src="./views/icon/'.$wx.'" style="height:60px;width:auto;"/>
+                                            </li>
+                                            <li class="list-group-item" style="border: none;">
+                                            '.$mint.'-'.$maxt.'°
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                    </div>
-                </ul>
-            </div>
+                            </div>';
+                    } ?>
+                </div>
+            </div> 
         </div>
 
         </div>
