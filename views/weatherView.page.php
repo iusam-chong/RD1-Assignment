@@ -9,8 +9,20 @@ require_once('header.page.php');
 <div class="container text-center">
 <div class="row h-75">
 <div class="col-sm-12 my-auto">
-    <div class="row">
+    
+<div class="row" style="padding-top:15px;">
+        <div class="col-12">
+        
+        <div class="card " style="border:none;">
+            <div class="card-body">
+                <img src="./views/image/<?= $headerImage?>" style="height: auto;max-width: 100%;"/>
+            </div> 
+        </div>
 
+        </div>
+    </div>
+    
+    <div class="row"> 
     <div class="col-3">
         <div class="card border-primary " style="height: 16rem;">
             <div class="card-body">
@@ -151,6 +163,38 @@ require_once('header.page.php');
                                 </div>
                             </div>';
                     } ?>
+                </div>
+            </div> 
+        </div>
+
+        </div>
+    </div>
+
+    <div class="row" style="padding-top:25px;padding-bottom:25px;">
+        <div class="col-12">
+        
+        <div class="card border-success">
+            <div class="card-body">
+                <h5 class="card-title">觀測站累積雨量數據</h5>
+                <div class="row seven-cols">
+                    <table class="table table-striped text-center">
+                        <tr>
+                            <th>地區名稱</th>
+                            <th>1小時累積雨量</th>
+                            <th>24小時累積雨量</th>
+                        </tr>
+                    <?php foreach ($rain as $r) {
+                        $location = $r['location'];
+                        $hour = $r['hour'];
+                        $day = $r['day'];
+
+                        echo '<tr>
+                            <td>'.$location.'</td>
+                            <td>'.$hour.'</td>
+                            <td>'.$day.'</td>
+                            </tr>';
+                    } ?>
+                    </table>
                 </div>
             </div> 
         </div>

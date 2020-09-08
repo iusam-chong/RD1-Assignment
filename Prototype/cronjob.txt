@@ -1,1 +1,1 @@
-*/1 * * * * lynx http://localhost:8888/RD1-Assignment/Week-Update.php
+*/1 * * * * lynx http://localhost:8888/RD1-Assignment/update.php

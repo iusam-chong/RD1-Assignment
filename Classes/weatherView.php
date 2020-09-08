@@ -5,12 +5,19 @@ class WeatherView extends Weather {
     public function showWeather($cityName) {
         $this->title = "天氣預報";
         
+        $headerImage = $this->createBg($cityName);
+
         $today = $this->getTodayWeather($cityName);
         $todayDayOrNight = ($today['hour'] >= 18) ? '晚上' : '早上' ;
 
         # hour would be 06 or 18
         $twoday = $this->getTwoDayWeather($cityName,'06');
+
         $week = $this->getWeekWeather($cityName,'06');
+
+        $rain = $this->getAccumRain($cityName);
+
+        //print_r($rain);
        
         require_once('./views/weatherView.page.php');
     }
@@ -30,6 +37,10 @@ class WeatherView extends Weather {
         else return 'icon-10.svg';
     }
 
+    function createBg($cityName) {
+        $result = $cityName.'.jpg';
+        return $result;
+    }
 
 
 }

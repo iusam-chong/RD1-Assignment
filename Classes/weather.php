@@ -112,6 +112,15 @@ class Weather extends Dbh {
 
         return $result;
     }
+
+    public function getAccumRain($cityName) {
+
+        $sql = "SELECT * FROM `accumlaterain` WHERE (`city` = ?)";
+        $param = array($cityName);
+        $result = $this->selectAll($sql,$param);
+
+        return $result;
+    }
 }
 
 ?>

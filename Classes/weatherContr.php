@@ -4,7 +4,7 @@ class WeatherContr extends Weather {
 
 public function updateWeather() {
     
-    $time_start = microtime(true);
+    // $time_start = microtime(true);
 
     $data = $this->constructOneDay();
     $this->runUpdateOne('oneday', $data);
@@ -15,11 +15,11 @@ public function updateWeather() {
     $data = $this->constructWeek();
     $this->runUpdateWeek('week', $data);
 
-    // $data = $this->constructAccumRain();
-    // $this->updateAccumRain('accumlaterain', $data);
+    $data = $this->constructAccumRain();
+    $this->updateAccumRain('accumlaterain', $data);
 
-    $time_end = microtime(true);
-    echo $time_end - $time_start;
+    // $time_end = microtime(true);
+    // echo $time_end - $time_start;
 }
 
 public function constructAccumRain() {
@@ -218,10 +218,11 @@ public function constructWeek() {
                     # we just want 7days data, more than 7days we skip
                     if ($diff > 7)
                         continue;
-                } else {
-                    # if day is today, we dont need these data, so skip this loop
-                    continue;
-                }
+                } 
+                // else {
+                //     # if day is today, we dont need these data, so skip this loop
+                //     continue;
+                // }
 
                 # if time is not 0600 or 1800 we don't need it , pass again
                 if (!($getHour == 18 || $getHour == 6)){

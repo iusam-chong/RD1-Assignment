@@ -15,6 +15,7 @@
 <link href="./views/css/customize.css" rel="stylesheet">
 
 <style type="text/css">
+
   @media (min-width: 768px){
   .seven-cols .col-md-1,
   .seven-cols .col-sm-1,
@@ -45,6 +46,7 @@ flex:none !important;
 flex:none !important;
   }
 }
+
 </style>
 
 </header>
