@@ -12,7 +12,7 @@ ignore_user_abort(TRUE);
 set_time_limit(0);
 
 # do every second * time
-$interval = 60 * 2; //60*30 = 30minutes
+$interval = 60 * 30; //60*30 = 30minutes
 
 do {
 

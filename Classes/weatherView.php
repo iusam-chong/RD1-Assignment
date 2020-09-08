@@ -13,7 +13,7 @@ class WeatherView extends Weather {
         # hour would be 06 or 18
         $twoday = $this->getTwoDayWeather($cityName,'06');
 
-        $week = $this->getWeekWeather($cityName,'06');
+        $week = $this->getWeekWeather($cityName,'18');
 
         $rain = $this->getAccumRain($cityName);
 
